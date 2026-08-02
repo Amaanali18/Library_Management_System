@@ -19,7 +19,8 @@ app:
   frontend_url: ${FRONTEND_URL}
   jwt:
     secret: ${JWT_SECRET}
-    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+    expiration-ms-access: ${JWT_EXPIRATION_MS_ACCESS:3600000}
+    expiration-ms-refresh: ${JWT_EXPIRATION_MS_REFRESH:86400000}
 logging:
   level:
     root: INFO
