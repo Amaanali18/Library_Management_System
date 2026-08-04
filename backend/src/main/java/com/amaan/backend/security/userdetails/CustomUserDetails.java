@@ -1,0 +1,59 @@
+package com.amaan.backend.security.userdetails;
+
+import com.amaan.backend.entity.Status;
+import com.amaan.backend.entity.User;
+import org.jspecify.annotations.NullMarked;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+public class CustomUserDetails implements UserDetails {
+
+    private final User user;
+
+    public CustomUserDetails(User user) {
+        this.user = user;
+    }
+
+    public UUID getId(){
+        return user.getId();
+    }
+
+    @Override
+    public @NullMarked Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return user.getStatus()!=Status.DISABLED;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return user.getStatus()!=Status.BANNED;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return user.getStatus()==Status.ACTIVE;
+    }
+}
