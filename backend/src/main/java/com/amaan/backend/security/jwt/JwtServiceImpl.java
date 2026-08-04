@@ -1,55 +1,96 @@
 package com.amaan.backend.security.jwt;
 
 import com.amaan.backend.entity.User;
-import org.springframework.beans.factory.annotation.Value;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.context.annotation.Configuration;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.UUID;
 
+@Configuration
 public class JwtServiceImpl implements JwtService {
 
     private final SecretKey key;
     private final long accessTokenExpiration;
     private final long refreshTokenExpiration;
 
-    public JwtServiceImpl(@Value("jwt.secret") SecretKey key,@Value("jwt.expiration-ms-access") long accessTokenExpiration,@Value("jwt.expiration-ms-refresh") long refreshTokenExpiration) {
-        this.key = key;
-        this.accessTokenExpiration = accessTokenExpiration;
-        this.refreshTokenExpiration = refreshTokenExpiration;
+    public JwtServiceImpl(JwtProperties properties) {
+        this.key = Keys.hmacShaKeyFor(properties.secret().getBytes(StandardCharsets.UTF_8));
+        this.accessTokenExpiration = properties.expirationMsAccess();
+        this.refreshTokenExpiration = properties.expirationMsRefresh();
     }
 
     @Override
     public String generateAccessToken(User user) {
-        return "";
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("userId", user.getId())
+                .claim("role", user.getRole().getName())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
+                .signWith(key)
+                .compact();
     }
 
     @Override
     public String generateRefreshToken(User user) {
-        return "";
+        return Jwts.builder()
+                .subject(user.getEmail())
+                .claim("userId", user.getId())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+                .signWith(key)
+                .compact();
+    }
+
+    @Override
+    public Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     @Override
     public String extractEmail(String token) {
-        return "";
+        return extractClaims(token).getSubject();
     }
 
     @Override
     public UUID extractUserId(String token) {
-        return null;
+        return UUID.fromString(extractClaims(token).get("userId", String.class));
     }
 
     @Override
     public String extractRole(String token) {
-        return "";
+        return extractClaims(token).get("role", String.class);
     }
 
     @Override
     public boolean isTokenValid(String token) {
-        return false;
+        try{
+            extractClaims(token);
+            return true;
+        }catch (JwtException | IllegalArgumentException e){
+            return false;
+        }
     }
 
     @Override
     public boolean isTokenExpired(String token) {
-        return false;
+        try{
+            extractClaims(token);
+            return false;
+        }catch (ExpiredJwtException e){
+            return true;
+        }catch (JwtException | IllegalArgumentException e){
+            return false;
+        }
     }
 }
