@@ -1,4 +1,4 @@
-package com.amaan.backend.helpers.dtos;
+package com.amaan.backend.dtos.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

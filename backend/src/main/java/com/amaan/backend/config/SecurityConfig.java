@@ -1,4 +1,4 @@
-package com.amaan.backend.security.config;
+package com.amaan.backend.config;
 
 import com.amaan.backend.security.jwt.JwtAuthenticationFilter;
 import com.amaan.backend.security.userdetails.CustomUserDetailsService;
