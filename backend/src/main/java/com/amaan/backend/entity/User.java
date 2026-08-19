@@ -26,6 +26,7 @@ public class User {
     private String password;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Status status =  Status.ACTIVE;
     @CreationTimestamp
     private Instant createdAt;
