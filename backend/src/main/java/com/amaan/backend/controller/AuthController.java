@@ -1,5 +1,6 @@
 package com.amaan.backend.controller;
 
+import com.amaan.backend.dtos.request.LoginRequest;
 import com.amaan.backend.dtos.request.SignupRequest;
 import com.amaan.backend.dtos.response.AuthResponse;
 import com.amaan.backend.services.AuthService;
@@ -22,6 +23,11 @@ public class AuthController {
     @PostMapping("/signup")
     public AuthResponse auth(@RequestBody @Valid SignupRequest signupRequest, HttpServletResponse  response) {
         return authService.register(signupRequest,response);
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse  response) {
+        return authService.login(loginRequest,response);
     }
 
 }

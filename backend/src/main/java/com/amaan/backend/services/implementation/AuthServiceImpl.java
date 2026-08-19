@@ -8,9 +8,13 @@ import com.amaan.backend.entity.Status;
 import com.amaan.backend.entity.User;
 import com.amaan.backend.repository.RoleRepository;
 import com.amaan.backend.repository.UserRepository;
+import com.amaan.backend.security.jwt.JwtService;
+import com.amaan.backend.security.userdetails.CustomUserDetails;
 import com.amaan.backend.services.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +26,15 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(RoleRepository roleRepository, UserRepository userRepository , PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(RoleRepository roleRepository,JwtService jwtService, UserRepository userRepository , PasswordEncoder passwordEncoder , AuthenticationManager authenticationManager) {
         this.roleRepository = roleRepository;
+        this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -54,12 +62,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> login(LoginRequest dto, HttpServletResponse response) {
-        return null;
+    public AuthResponse login(LoginRequest dto, HttpServletResponse response) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setMessage("Login Failed");
+        authResponse.setStatus(403);
+        authResponse.setToken(null);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        if(userDetails==null) return authResponse;
+        User user = userDetails.getUser();
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        authResponse.setStatus(200);
+        authResponse.setMessage("Login successful");
+        authResponse.setToken(accessToken);
+        return authResponse;
     }
 
     @Override
-    public ResponseEntity<?> logout(UUID userId, HttpServletResponse response) {
+    public AuthResponse logout(UUID userId, HttpServletResponse response) {
         return null;
     }
 }
