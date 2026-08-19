@@ -12,7 +12,7 @@ import lombok.*;
 public class LoginRequest {
     @NotBlank
     @Size(max=254)
-    private String username;
+    private String email;
     @NotBlank
     @Size(min=8,max=72)
     private String password;
