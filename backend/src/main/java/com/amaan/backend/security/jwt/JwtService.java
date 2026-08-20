@@ -2,6 +2,8 @@ package com.amaan.backend.security.jwt;
 
 import com.amaan.backend.entity.User;
 import io.jsonwebtoken.Claims;
+
+import java.time.Instant;
 import java.util.UUID;
 
 public interface JwtService {
@@ -13,4 +15,6 @@ public interface JwtService {
     String extractRole(String token);
     boolean isTokenValid(String token);
     boolean isTokenExpired(String token);
+    Instant expiresRefresh();
+    Instant expiresAccess();
 }

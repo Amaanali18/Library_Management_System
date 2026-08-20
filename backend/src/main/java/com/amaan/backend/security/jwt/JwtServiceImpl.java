@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -95,5 +96,15 @@ public class JwtServiceImpl implements JwtService {
         }catch (JwtException | IllegalArgumentException e){
             return false;
         }
+    }
+
+    @Override
+    public Instant expiresRefresh() {
+        return Instant.now().plusMillis(refreshTokenExpiration);
+    }
+
+    @Override
+    public Instant expiresAccess() {
+        return Instant.now().plusMillis(accessTokenExpiration);
     }
 }

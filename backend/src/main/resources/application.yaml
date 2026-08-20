@@ -25,4 +25,4 @@ logging:
   level:
     root: INFO
     org.springframework.security: WARN
-    org.hibernate.SQL: WARN
+    org.hibernate.SQL: DEBUG

@@ -4,6 +4,7 @@ import com.amaan.backend.dtos.request.LoginRequest;
 import com.amaan.backend.dtos.request.SignupRequest;
 import com.amaan.backend.dtos.response.AuthResponse;
 import com.amaan.backend.services.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +31,8 @@ public class AuthController {
         return authService.login(loginRequest,response);
     }
 
+    @PostMapping("/refresh")
+    public AuthResponse refresh(HttpServletRequest request) {
+        return authService.refresh(request);
+    }
 }
