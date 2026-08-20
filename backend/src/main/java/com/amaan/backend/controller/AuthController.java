@@ -35,4 +35,9 @@ public class AuthController {
     public AuthResponse refresh(HttpServletRequest request) {
         return authService.refresh(request);
     }
+
+    @PostMapping("/logout")
+    public AuthResponse logout(HttpServletRequest request,HttpServletResponse response) {
+        return authService.logout(request,response);
+    }
 }

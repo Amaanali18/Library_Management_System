@@ -1,4 +1,4 @@
-package com.amaan.backend.services.implementation;
+package com.amaan.backend.services.impl;
 
 import com.amaan.backend.dtos.request.LoginRequest;
 import com.amaan.backend.dtos.request.SignupRequest;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -103,8 +102,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse logout(UUID userId, HttpServletResponse response) {
-        return null;
+    public AuthResponse logout(HttpServletRequest request,HttpServletResponse response) {
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setStatus(200);
+        authResponse.setMessage("Logged out");
+        authResponse.setToken(null);
+        String token = jwtAuthenticationFilter.extractRefreshToken(request);
+        if (token != null) {
+            RefreshToken refreshToken = refreshTokenRepository.findByToken(token).orElse(null);
+            if (refreshToken!=null) {
+                refreshToken.setRevoked(true);
+                refreshTokenRepository.save(refreshToken);
+            }
+        }
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return authResponse;
     }
 
     @Override
