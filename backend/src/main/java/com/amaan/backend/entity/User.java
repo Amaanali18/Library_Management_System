@@ -1,5 +1,6 @@
 package com.amaan.backend.entity;
 
+import com.amaan.backend.constants.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -27,7 +28,7 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private Status status =  Status.ACTIVE;
+    private UserStatus status =  UserStatus.ACTIVE;
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

@@ -1,12 +1,10 @@
 package com.amaan.backend.services.impl;
 
+import com.amaan.backend.constants.UserStatus;
 import com.amaan.backend.dtos.request.LoginRequest;
 import com.amaan.backend.dtos.request.SignupRequest;
 import com.amaan.backend.dtos.response.AuthResponse;
-import com.amaan.backend.entity.RefreshToken;
-import com.amaan.backend.entity.Role;
-import com.amaan.backend.entity.Status;
-import com.amaan.backend.entity.User;
+import com.amaan.backend.entity.*;
 import com.amaan.backend.repository.RefreshTokenRepository;
 import com.amaan.backend.repository.RoleRepository;
 import com.amaan.backend.repository.UserRepository;
@@ -62,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail());
         user.setName(dto.getName());
         user.setPassword(hashedPassword);
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(UserStatus.ACTIVE);
         user.setRole(role);
         userRepository.save(user);
         authResponse.setStatus(201);

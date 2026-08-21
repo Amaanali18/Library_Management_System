@@ -1,6 +1,6 @@
 package com.amaan.backend.security.userdetails;
 
-import com.amaan.backend.entity.Status;
+import com.amaan.backend.constants.UserStatus;
 import com.amaan.backend.entity.User;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,12 +43,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return user.getStatus()!=Status.DISABLED;
+        return user.getStatus()!=UserStatus.DISABLED;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.getStatus()!=Status.BANNED;
+        return user.getStatus()!= UserStatus.BANNED;
     }
 
     @Override
@@ -58,6 +58,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getStatus()==Status.ACTIVE;
+        return user.getStatus()==UserStatus.ACTIVE;
     }
 }
