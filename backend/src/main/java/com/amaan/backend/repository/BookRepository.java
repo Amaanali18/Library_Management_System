@@ -12,6 +12,8 @@ import java.util.UUID;
 public interface BookRepository extends JpaRepository<Book, UUID> {
     Optional<Book> findByIsbn(String isbn);
     boolean existsByIsbn(String isbn);
-    List<Book> findByTitleContainingIgnoreCase(String title);
-    List<Book> findByAuthorContainingIgnoreCase(String author);
+    List<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+            String title,
+            String author
+    );
 }

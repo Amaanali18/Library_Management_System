@@ -14,7 +14,7 @@ public class BookResponse {
     private UUID id;
     private String title;
     private String author;
-    private Long isbn;
+    private String isbn;
     private String description;
     private Date publishDate;
     private Integer pages;
