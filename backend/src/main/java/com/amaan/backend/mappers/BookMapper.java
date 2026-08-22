@@ -1,6 +1,5 @@
 package com.amaan.backend.mappers;
 
-import com.amaan.backend.constants.BookStatus;
 import com.amaan.backend.dtos.request.BookRequest;
 import com.amaan.backend.dtos.response.BookResponse;
 import com.amaan.backend.entity.Book;
@@ -32,12 +31,8 @@ public class BookMapper {
                 .publishDate(book.getPublishDate())
                 .pages(book.getPages())
                 .previewContent(book.getPreviewContent())
-                .totalCopies(book.getBookCopies().size())
-                .availableCopies(
-                        (int) book.getBookCopies().stream()
-                                .filter(copy -> copy.getStatus() == BookStatus.AVAILABLE)
-                                .count()
-                )
+                .totalCopies(0)
+                .availableCopies(0)
                 .build();
     }
 }

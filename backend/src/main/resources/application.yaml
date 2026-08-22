@@ -24,5 +24,5 @@ app:
 logging:
   level:
     root: INFO
-    org.springframework.security: WARN
+    org.springframework.security: TRACE
     org.hibernate.SQL: DEBUG
