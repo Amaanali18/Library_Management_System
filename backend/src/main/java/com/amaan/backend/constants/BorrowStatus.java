@@ -1,8 +1,8 @@
 package com.amaan.backend.constants;
 
-public enum BookStatus {
-    AVAILABLE,
+public enum BorrowStatus {
     BORROWED,
-    DAMAGED,
+    RETURNED,
+    OVERDUE,
     LOST
 }

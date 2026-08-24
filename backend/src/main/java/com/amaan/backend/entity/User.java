@@ -19,6 +19,7 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name="user_id")
     private UUID id;
     private String name;
     private String email;
@@ -34,6 +35,6 @@ public class User {
     @UpdateTimestamp
     private Instant updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 }
