@@ -17,6 +17,9 @@ public class BookCopy {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "book_copy_id")
     private UUID id;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
     private BookStatus status = BookStatus.AVAILABLE;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id" , nullable = false)

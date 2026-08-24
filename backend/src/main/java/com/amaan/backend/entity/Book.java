@@ -37,7 +37,12 @@ public class Book {
     private Instant createdAt;
     @UpdateTimestamp
     private Instant updatedAt;
-    @OneToMany(mappedBy = "book" , fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "book",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @Builder.Default
     private List<BookCopy> bookCopies = new ArrayList<>();
 }
