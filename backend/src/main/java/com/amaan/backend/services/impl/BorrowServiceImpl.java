@@ -2,6 +2,7 @@ package com.amaan.backend.services.impl;
 
 import com.amaan.backend.constants.BookStatus;
 import com.amaan.backend.constants.BorrowStatus;
+import com.amaan.backend.constants.UserStatus;
 import com.amaan.backend.dtos.request.BorrowRequest;
 import com.amaan.backend.dtos.response.BorrowResponse;
 import com.amaan.backend.entity.Book;
@@ -48,11 +49,22 @@ public class BorrowServiceImpl implements BorrowService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userDetails.getUser();
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new RuntimeException("User is not allowed to borrow books");
+        }
         Book book = bookRepository.findById(request.getBookId()).orElseThrow(() -> new RuntimeException("Book not found"));
         BookCopy copy = bookCopyRepository.findFirstByBookIdAndStatus(
                         book.getId(),
                         BookStatus.AVAILABLE
                 ).orElseThrow(() -> new RuntimeException("No available copies"));
+        long activeBorrows = borrowRecordRepository
+                .countByUserIdAndBorrowStatus(
+                        user.getId(),
+                        BorrowStatus.BORROWED
+                );
+        if (activeBorrows >= 5) {
+            throw new RuntimeException("You cannot borrow more than 5 books");
+        }
         Instant borrowDate = Instant.now();
         Instant dueDate = borrowDate.plus(14, ChronoUnit.DAYS);
         BorrowRecord record = new BorrowRecord();

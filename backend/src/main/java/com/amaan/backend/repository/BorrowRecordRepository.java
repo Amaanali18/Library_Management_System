@@ -17,4 +17,5 @@ public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, UUID
             UUID userId,
             BorrowStatus status
     );
+    long countByUserIdAndBorrowStatus(UUID userId, BorrowStatus status);
 }

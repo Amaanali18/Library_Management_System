@@ -26,3 +26,8 @@ logging:
     root: INFO
     org.springframework.security: TRACE
     org.hibernate.SQL: DEBUG
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
