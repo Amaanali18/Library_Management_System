@@ -11,4 +11,6 @@ public interface FineService {
     FineResponse getFine(UUID fineId);
 
     FineResponse getFineByBorrowRecord(UUID borrowRecordId);
+
+    void processOverdueFines();
 }
