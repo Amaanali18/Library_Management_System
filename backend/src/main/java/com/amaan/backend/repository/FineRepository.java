@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface FineRepository extends JpaRepository<Fine, UUID> {
 
     Optional<Fine> findByBorrowRecordId(UUID borrowRecordId);
-    List<BorrowRecord> findByBorrowStatus(BorrowStatus status);
+
 }
