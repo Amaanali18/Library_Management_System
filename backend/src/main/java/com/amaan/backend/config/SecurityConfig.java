@@ -1,5 +1,6 @@
 package com.amaan.backend.config;
 
+import com.amaan.backend.security.SecurityErrorHandlers;
 import com.amaan.backend.security.jwt.JwtAuthenticationFilter;
 import com.amaan.backend.security.userdetails.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,10 +33,12 @@ public class SecurityConfig {
     private final String frontendUrl;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService,JwtAuthenticationFilter jwtAuthenticationFilter,@Value("${app.frontend_url}") String frontendUrl) {
+    private final SecurityErrorHandlers securityErrorHandlers;
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, @Value("${app.frontend_url}") String frontendUrl, SecurityErrorHandlers securityErrorHandlers) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.frontendUrl = frontendUrl;
+        this.securityErrorHandlers = securityErrorHandlers;
     }
 
     @Bean
@@ -88,6 +91,10 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(securityErrorHandlers)
+                        .accessDeniedHandler(securityErrorHandlers)
                 );
         return http.build();
     }
