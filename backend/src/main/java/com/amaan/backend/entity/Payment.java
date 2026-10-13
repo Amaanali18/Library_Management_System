@@ -29,12 +29,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "fine_id",
-            nullable = false,
-            unique = true
-    )
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fine_id", nullable = false)
     private Fine fine;
 
     @ManyToOne(fetch = FetchType.LAZY)
