@@ -1,4 +1,4 @@
-import api from "./axiosInstance";
+import api from "../services/axiosInstance";
 
 export const getMyFines = async () => {
   const response = await api.get("/api/fines/my");

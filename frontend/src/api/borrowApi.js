@@ -1,4 +1,4 @@
-import api from "./axiosInstance";
+import api from "../services/axiosInstance";
 
 export const borrowBook = async (borrowRequest) => {
   const response = await api.post("/api/borrow", borrowRequest);

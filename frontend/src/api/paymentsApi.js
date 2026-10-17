@@ -1,4 +1,4 @@
-import api from "./axiosInstance";
+import api from "../services/axiosInstance";
 
 export const createPayment = async (fineId) => {
   const idempotencyKey = localStorage.getItem(`idem_${fineId}`) || crypto.randomUUID();
